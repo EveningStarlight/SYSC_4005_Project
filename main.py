@@ -1,6 +1,6 @@
 import simulation
 
-def main():
+if __name__ == '__main__':
     SIMULATION_TIME = 60*8
     seed = 1234
 

@@ -1,5 +1,7 @@
 import event
 
+import queue
+
 class Buffer:
     """docstring for Buffer."""
 
