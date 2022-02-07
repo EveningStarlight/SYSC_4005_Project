@@ -3,14 +3,14 @@ import inspector
 import buffer
 import workstation
 
-class Simulation(Object):
+class Simulation:
     """docstring for Component."""
 
     def __init__(self, simulationTime):
         super(Simulation, self).__init__()
 
         self.futureEvents = queue.PriorityQueue()
-        self.futureEvents.put(Event(SIMULATION_TIME, , "end"))
+        self.futureEvents.put(Event(SIMULATION_TIME, self, "end"))
 
         self.workstation1Buffer = Buffer(component=1, product=1)
         self.workstation1 = Workstation(buffers=[workstation1Buffer])

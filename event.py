@@ -1,4 +1,4 @@
-class Event(Object):
+class Event:
     """docstring for Component."""
 
     def __init__(self, eventTime, eventCaller, eventAction):

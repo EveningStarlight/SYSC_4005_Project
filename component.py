@@ -1,4 +1,4 @@
-class Component(object):
+class Component:
     """docstring for Component."""
 
     def __init__(self, componentTypes):

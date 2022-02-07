@@ -1,6 +1,6 @@
 import event
 
-class Inspector(object):
+class Inspector:
     """docstring for Inspector."""
 
     def __init__(self, components, buffers, futureEvents):
@@ -9,3 +9,6 @@ class Inspector(object):
         self.buffers = buffers
         self.processingTime = processingTime
         self.futureEvents = futureEvents
+
+    def start(self):
+        pass

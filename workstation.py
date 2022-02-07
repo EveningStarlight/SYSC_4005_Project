@@ -1,6 +1,6 @@
 import event
 
-class Workstation(object):
+class Workstation:
     """docstring for Workstation."""
 
     def __init__(self, buffers, product, futureEvents):

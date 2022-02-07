@@ -1,6 +1,6 @@
 import event
 
-class Buffer(object):
+class Buffer:
     """docstring for Buffer."""
 
     def __init__(self, component, product, futureEvents):
