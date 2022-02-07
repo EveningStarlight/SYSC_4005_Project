@@ -17,3 +17,12 @@ class Buffer:
 
     def addComponent(self, component):
         self.buffer.put(component)
+
+    def removeComponent(self):
+        return self.buffer.get()
+
+    def __lt__(self, other):
+        if self.buffer.size < other.buffer.size:
+            return self.buffer.size < other.buffer.size
+        else:
+            return self.product < other.product
