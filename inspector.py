@@ -1,5 +1,5 @@
-import event
-import component
+from event import Event
+from component import Component
 
 class Inspector:
     """docstring for Inspector."""
@@ -11,11 +11,11 @@ class Inspector:
         self.futureEvents = futureEvents
 
     def start(self):
-        self.futureEvents.put(event.Event(0, self, self.getComponent))
+        self.futureEvents.put(Event(0, self, self.getComponent))
 
     def getComponent(self, simulationTime):
-        self.component = component.Component(self.components)
-        self.futureEvents.put(event.Event(simulationTime+10, self, self.putComponent))
+        self.component = Component(self.components)
+        self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
         print(str(self) + " grabbed " + str(self.component))
 
     def putComponent(self, simulationTime):

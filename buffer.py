@@ -15,6 +15,9 @@ class Buffer:
     def isFull(self):
         self.buffer.full()
 
+    def isEmpty(self):
+        self.buffer.empty()
+
     def addComponent(self, component):
         self.buffer.put(component)
 
@@ -26,3 +29,9 @@ class Buffer:
             return self.buffer.size < other.buffer.size
         else:
             return self.product < other.product
+
+    def hasComponent(buffer):
+        return not buffer.isEmpty()
+
+    def get(buffer):
+        return buffer.get()
