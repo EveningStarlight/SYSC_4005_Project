@@ -40,7 +40,7 @@ class Simulation:
 
 
     def start(self):
-        print(chalk.cyan("Starting Simulation"))
+        self.log(chalk.cyan("Starting Simulation"))
         self.inspectors[0].start()
         self.inspectors[1].start()
 
@@ -51,6 +51,7 @@ class Simulation:
             self.pastEvents.append(currentEvent)
             currentEvent = self.futureEvents.get()
             self.currentTime = currentEvent.time
+        self.log(chalk.cyan("Simulation Complete"))
 
     def log(self, message):
         timeString = "{:7.3f}s".format(self.currentTime)
