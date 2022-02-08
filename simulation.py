@@ -4,6 +4,7 @@ from buffer import Buffer
 from workstation import Workstation
 
 import queue
+from simple_chalk import chalk
 
 class Simulation:
     """docstring for Component."""
@@ -14,28 +15,34 @@ class Simulation:
         self.seed = seed
         self.currentTime = 0
 
-        self.futureEvents = queue.PriorityQueue()
+        futureEvents = queue.PriorityQueue()
+        futureEvents.put(Event(simulationRunTime, self, "end"))
+
+        buffer_1_1 = Buffer(component=1, product=1, futureEvents=futureEvents)
+        workstation1 = Workstation(name="Workstation 1", buffers=[buffer_1_1], product=1, futureEvents=futureEvents, log=self.log)
+
+        buffer_2_1 = Buffer(component=1, product=2, futureEvents=futureEvents)
+        buffer_2_2 = Buffer(component=2, product=2, futureEvents=futureEvents)
+        workstation2 = Workstation(name="Workstation 2", buffers = [buffer_2_1,buffer_2_2], product=2, futureEvents=futureEvents, log=self.log)
+
+        buffer_3_1 = Buffer(component=1, product=3, futureEvents=futureEvents)
+        buffer_3_3 = Buffer(component=3, product=3, futureEvents=futureEvents)
+        workstation3 = Workstation(name="Workstation 3", buffers=[buffer_3_1, buffer_3_3], product=3, futureEvents=futureEvents, log=self.log)
+
+        inspector1 = Inspector(name="Inspector 1", components=[1], buffers=[buffer_1_1, buffer_2_1, buffer_3_1], futureEvents=futureEvents, log=self.log)
+        inspector2 = Inspector(name="Inspector 2", components=[2,3], buffers=[buffer_2_2, buffer_3_3], futureEvents=futureEvents, log=self.log)
+
         self.pastEvents = list()
-        self.futureEvents.put(Event(simulationRunTime, self, "end"))
+        self.futureEvents = futureEvents
+        self.inspectors = [inspector1, inspector2]
+        self.buffers = [buffer_1_1, buffer_2_1, buffer_2_2, buffer_3_1, buffer_3_3]
+        self.workstations = [workstation1, workstation2, workstation3]
 
-        self.workstation1Buffer = Buffer(component=1, product=1, futureEvents=self.futureEvents)
-        self.workstation1 = Workstation(buffers=[self.workstation1Buffer], futureEvents=self.futureEvents)
-
-        self.workstation2Buffer_C1 = Buffer(component=1, product=2, futureEvents=self.futureEvents)
-        self.workstation2Buffer_C2 = Buffer(component=2, product=2, futureEvents=self.futureEvents)
-        self.workstation2 = Workstation(buffers = [self.workstation2Buffer_C1,self.workstation2Buffer_C2], futureEvents=self.futureEvents)
-
-        self.workstation3Buffer_C1 = Buffer(component=1, product=3, futureEvents=self.futureEvents)
-        self.workstation3Buffer_C3 = Buffer(component=3, product=3, futureEvents=self.futureEvents)
-        self.workstation3 = Workstation(buffers=[self.workstation3Buffer_C1, self.workstation3Buffer_C3], futureEvents=self.futureEvents)
-
-        self.inspector1 = Inspector(components=[1], buffers=[self.workstation1Buffer, self.workstation2Buffer_C1, self.workstation3Buffer_C1], futureEvents=self.futureEvents)
-        self.inspector2 = Inspector(components=[2,3], buffers=[self.workstation2Buffer_C2, self.workstation3Buffer_C3], futureEvents=self.futureEvents)
 
     def start(self):
-        print("Starting Simulation")
-        self.inspector1.start()
-        self.inspector2.start()
+        print(chalk.cyan("Starting Simulation"))
+        self.inspectors[0].start()
+        self.inspectors[1].start()
 
         currentEvent = self.futureEvents.get()
         while currentEvent.action != "end":
@@ -44,3 +51,7 @@ class Simulation:
             self.pastEvents.append(currentEvent)
             currentEvent = self.futureEvents.get()
             self.currentTime = currentEvent.time
+
+    def log(self, message):
+        timeString = "{:7.3f}s".format(self.currentTime)
+        print(chalk.bgGreen(timeString) + " " + message)

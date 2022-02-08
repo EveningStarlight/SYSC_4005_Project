@@ -18,20 +18,23 @@ class Buffer:
     def isEmpty(self):
         self.buffer.empty()
 
-    def addComponent(self, component):
+    def putComponent(self, component):
         self.buffer.put(component)
 
-    def removeComponent(self):
+    def getComponent(self):
         return self.buffer.get()
 
     def __lt__(self, other):
-        if self.buffer.size < other.buffer.size:
-            return self.buffer.size < other.buffer.size
+        if self.buffer.qsize() < other.buffer.qsize():
+            return self.buffer.qsize() < other.buffer.qsize()
         else:
             return self.product < other.product
+
+    def __str__(self):
+        return "Buffer " + str(self.product) + "-" + str(self.component)
 
     def hasComponent(buffer):
         return not buffer.isEmpty()
 
     def get(buffer):
-        return buffer.get()
+        return buffer.getComponent()
