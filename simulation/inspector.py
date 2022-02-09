@@ -1,6 +1,5 @@
 from event import Event
 from component import Component
-import time
 
 class Inspector:
     """docstring for Inspector."""
