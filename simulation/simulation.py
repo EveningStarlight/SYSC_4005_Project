@@ -3,6 +3,7 @@ from inspector import Inspector
 from buffer import Buffer
 from workstation import Workstation
 
+import random
 import queue
 import os.path
 from simple_chalk import chalk
@@ -29,31 +30,37 @@ class Simulation:
         for line in insp1TimesFile:
             inspector1Times.append(float(line))
         insp1TimesFile.close()
+        random.Random(self.seed).shuffle(inspector1Times)
         
         insp22TimesFile = open(os.path.join(path,'../data/servinsp22.dat'))
         for line in insp22TimesFile:
             inspector22Times.append(float(line))
         insp22TimesFile.close()
+        random.Random(self.seed).shuffle(inspector22Times)
         
         insp23TimesFile = open(os.path.join(path,'../data/servinsp23.dat'))
         for line in insp23TimesFile:
             inspector23Times.append(float(line))
         insp23TimesFile.close()
+        random.Random(self.seed).shuffle(inspector23Times)
         
         ws1TimesFile = open(os.path.join(path,'../data/ws1.dat'))
         for line in ws1TimesFile:
             workstation1Times.append(float(line))
         ws1TimesFile.close()
+        random.Random(self.seed).shuffle(workstation1Times)
         
         ws2TimesFile = open(os.path.join(path,'../data/ws2.dat'))
         for line in ws2TimesFile:
             workstation2Times.append(float(line))
         ws2TimesFile.close()
+        random.Random(self.seed).shuffle(workstation2Times)
         
         ws3TimesFile = open(os.path.join(path,'../data/ws3.dat'))
         for line in ws3TimesFile:
             workstation3Times.append(float(line))
         ws3TimesFile.close()
+        random.Random(self.seed).shuffle(workstation3Times)
   
         
         futureEvents = queue.PriorityQueue()

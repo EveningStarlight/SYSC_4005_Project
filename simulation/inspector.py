@@ -21,15 +21,12 @@ class Inspector:
     def getComponent(self, simulationTime):
         self.component = Component(self.components)
         if(len(self.components)==1):
-            random.Random(self.seed).shuffle(self.times)
-            self.futureEvents.put(Event(simulationTime+self.times[0], self, self.putComponent))
+            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.putComponent))
         elif(len(self.components)==2):
             if(str(self.component)=="Component Type 2"):
-                random.Random(self.seed).shuffle(self.times[0])
-                self.futureEvents.put(Event(simulationTime+self.times[0][0], self, self.putComponent))
+                self.futureEvents.put(Event(simulationTime+self.times[0].pop(0), self, self.putComponent))
             elif(str(self.component)=="Component Type 3"):
-                random.Random(self.seed).shuffle(self.times[1])
-                self.futureEvents.put(Event(simulationTime+self.times[1][0], self, self.putComponent))
+                self.futureEvents.put(Event(simulationTime+self.times[1].pop(0), self, self.putComponent))
         else:
             raise ValueError('The configuration was done wrong')
         self.log(str(self) + " grabbed " + str(self.component))

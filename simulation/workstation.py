@@ -17,10 +17,9 @@ class Workstation:
         self.seed = seed
 
     def getComponents(self):
-        random.Random(self.seed).shuffle(self.times)
         if all(map(Buffer.hasComponent, self.buffers)):
             self.components = list(map(Buffer.get, self.buffers))
-            self.futureEvents.put(Event(0+self.times[0], self, finishProduct))
+            self.futureEvents.put(Event(0+self.times.pop(0), self, finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         else:
             #todo implement blocking
