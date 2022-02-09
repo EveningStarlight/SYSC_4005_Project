@@ -5,12 +5,13 @@ class Inspector:
     """docstring for Inspector."""
 
 
-    def __init__(self, name, components, buffers, futureEvents, log):
+    def __init__(self, name, components, buffers, futureEvents, blockedQueue, log):
         super(Inspector, self).__init__()
         self.name = name
         self.components = components
         self.buffers = buffers
         self.futureEvents = futureEvents
+        self.blockedQueue = blockedQueue
         self.log = log
         self.blockedTime = 0
         self.blockTimeStart = 0
@@ -29,9 +30,9 @@ class Inspector:
         if buffer.isFull() and self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
             self.log(str(self) + " was blocked")
-            self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
+            self.blockedQueue.put(Event(simulationTime, self, self.putComponent))
         elif buffer.isFull():
-            self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
+            self.blockedQueue.put(Event(simulationTime, self, self.putComponent))
         else:
             if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)

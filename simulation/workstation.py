@@ -4,12 +4,13 @@ from buffer import Buffer
 class Workstation:
     """docstring for Workstation."""
 
-    def __init__(self, name, buffers, product, futureEvents, log):
+    def __init__(self, name, buffers, product, futureEvents, blockedQueue, log):
         super(Workstation, self).__init__()
         self.name = name
         self.buffers = buffers
         self.product = product
         self.futureEvents = futureEvents
+        self.blockedQueue = blockedQueue
         self.log = log
         self.productsMade = 0
         self.components = []
@@ -32,16 +33,16 @@ class Workstation:
         elif self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
             self.log(str(self) + " was blocked")
-            self.futureEvents.put(Event(simulationTime+10, self, self.getComponents))
+            self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
         else:
-            self.futureEvents.put(Event(simulationTime+10, self, self.getComponents))
+            self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
 
     def finishProduct(self, simulationTime):
         self.productsMade += 1
         self.components = []
         self.log(str(self) + " finished product #" + str(self.productsMade))
 
-        self.futureEvents.put(Event(simulationTime+10, self, self.getComponents))
+        self.getComponents(simulationTime)
 
     def __str__(self):
         return self.name
