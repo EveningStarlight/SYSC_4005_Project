@@ -33,8 +33,9 @@ class Inspector:
         elif buffer.isFull():
             self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
         else:
-            self.blockedTime += self.blockTimeStart
-            self.blockTimeStart = 0
+            if self.blockTimeStart != 0:
+                self.blockedTime += (simulationTime - self.blockTimeStart)
+                self.blockTimeStart = 0
             buffer.putComponent(self.component)
             self.log(str(self) + " put component in " + str(buffer))
             self.getComponent(simulationTime)
@@ -42,3 +43,9 @@ class Inspector:
 
     def __str__(self):
         return self.name
+
+    def end(self, simulationTime):
+        if self.blockTimeStart != 0:
+                self.blockedTime += (simulationTime - self.blockTimeStart)
+                self.blockTimeStart = 0
+        self.log(str(self) + " Total Blocked Time: " + str(self.blockedTime))

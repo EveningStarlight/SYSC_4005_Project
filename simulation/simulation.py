@@ -43,6 +43,9 @@ class Simulation:
         self.log(chalk.cyan("Starting Simulation"))
         self.inspectors[0].start()
         self.inspectors[1].start()
+        self.workstations[0].start()
+        self.workstations[1].start()
+        self.workstations[2].start()
 
         currentEvent = self.futureEvents.get()
         while currentEvent.action != "end":
@@ -52,6 +55,11 @@ class Simulation:
             currentEvent = self.futureEvents.get()
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
+        self.inspectors[0].end(self.currentTime)
+        self.inspectors[1].end(self.currentTime)
+        self.workstations[0].end(self.currentTime)
+        self.workstations[1].end(self.currentTime)
+        self.workstations[2].end(self.currentTime)
 
     def log(self, message):
         timeString = "{:7.3f}s".format(self.currentTime)

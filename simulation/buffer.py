@@ -16,7 +16,7 @@ class Buffer:
         return self.buffer.full()
 
     def isEmpty(self):
-        self.buffer.empty()
+        return self.buffer.empty()
 
     def putComponent(self, component):
         self.buffer.put(component)
