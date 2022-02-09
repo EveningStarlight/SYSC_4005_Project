@@ -18,7 +18,7 @@ class Simulation:
         futureEvents = queue.PriorityQueue()
         futureEvents.put(Event(simulationRunTime, self, "end"))
 
-        blockedQueue = queue.Queue()
+        blockedQueue = queue.PriorityQueue()
 
 
         buffer_1_1 = Buffer(component=1, product=1, futureEvents=futureEvents)
@@ -57,11 +57,12 @@ class Simulation:
 
             self.pastEvents.append(currentEvent)
 
-            if self.blockedQueue.qsize() != 0:
-                currentEvent = self.blockedQueue.get()
-            else:
-                currentEvent = self.futureEvents.get()
-            
+            blockedEvents = list(self.blockedQueue.queue)
+            self.blockedQueue.queue.clear()
+            for event in blockedEvents:
+                event.action(self.currentTime)
+
+            currentEvent = self.futureEvents.get()
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
 
