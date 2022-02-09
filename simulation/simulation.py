@@ -59,8 +59,8 @@ class Simulation:
 
             if self.blockedQueue.qsize() != 0:
                 currentEvent = self.blockedQueue.get()
-
-            currentEvent = self.futureEvents.get()
+            else:
+                currentEvent = self.futureEvents.get()
             
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
