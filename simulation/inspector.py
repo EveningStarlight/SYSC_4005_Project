@@ -1,8 +1,10 @@
 from event import Event
 from component import Component
+import time
 
 class Inspector:
     """docstring for Inspector."""
+
 
     def __init__(self, name, components, buffers, futureEvents, log):
         super(Inspector, self).__init__()
@@ -11,6 +13,7 @@ class Inspector:
         self.buffers = buffers
         self.futureEvents = futureEvents
         self.log = log
+        self._start_time = None
 
     def start(self):
         self.futureEvents.put(Event(0, self, self.getComponent))
@@ -23,13 +26,16 @@ class Inspector:
     def putComponent(self, simulationTime):
         buffer = min(self.buffers)
         if buffer.isFull():
-            #todo block and await
             self.log(str(self) + " was blocked")
-            pass
-        else:
-            buffer.putComponent(self.component)
-            self.log(str(self) + " put component in " + str(buffer))
-            self.getComponent(simulationTime)
+            self._start_time = time.perf_counter()
+            while buffer.isFull():
+                buffer = min(self.buffers)
+            elapsed_time = time.perf_counter() - self._start_time
+            self._start_time = None
+            self.log(str(self) + " Blocked time: {elapsed_time:0.4f} seconds")
+        buffer.putComponent(self.component)
+        self.log(str(self) + " put component in " + str(buffer))
+        self.getComponent(simulationTime)
 
 
     def __str__(self):

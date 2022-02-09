@@ -13,10 +13,13 @@ class Workstation:
         self.log = log
         self.productsMade = 0
 
-    def getComponents(self):
+    def start(self):
+        self.futureEvents.put(Event(0, self, self.getComponents))
+
+    def getComponents(self, simulationTime):
         if all(map(Buffer.hasComponent, self.buffers)):
             self.components = list(map(Buffer.get, self.buffers))
-            self.futureEvents.put(Event(0+10, self, finishProduct))
+            self.futureEvents.put(Event(simulationTime+10, self, self.finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         else:
             #todo implement blocking
