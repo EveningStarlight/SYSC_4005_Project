@@ -13,10 +13,12 @@ class Inspector:
         self.buffers = buffers
         self.futureEvents = futureEvents
         self.log = log
-        self._start_time = None
+        self.blockedTime = 0
+        self.blockTimeStart = 0
 
     def start(self):
         self.futureEvents.put(Event(0, self, self.getComponent))
+        self.log(str(self) + " Started ")
 
     def getComponent(self, simulationTime):
         self.component = Component(self.components)
@@ -25,17 +27,18 @@ class Inspector:
 
     def putComponent(self, simulationTime):
         buffer = min(self.buffers)
-        if buffer.isFull():
+        if buffer.isFull() and self.blockTimeStart == 0:
+            self.blockTimeStart = simulationTime
             self.log(str(self) + " was blocked")
-            self._start_time = time.perf_counter()
-            while buffer.isFull():
-                buffer = min(self.buffers)
-            elapsed_time = time.perf_counter() - self._start_time
-            self._start_time = None
-            self.log(str(self) + " Blocked time: {elapsed_time:0.4f} seconds")
-        buffer.putComponent(self.component)
-        self.log(str(self) + " put component in " + str(buffer))
-        self.getComponent(simulationTime)
+            self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
+        elif buffer.isFull():
+            self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
+        else:
+            self.blockedTime += self.blockTimeStart
+            self.blockTimeStart = 0
+            buffer.putComponent(self.component)
+            self.log(str(self) + " put component in " + str(buffer))
+            self.getComponent(simulationTime)
 
 
     def __str__(self):
