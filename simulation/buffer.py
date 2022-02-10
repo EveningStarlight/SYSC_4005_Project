@@ -13,10 +13,10 @@ class Buffer:
         self.futureEvents = futureEvents
 
     def isFull(self):
-        self.buffer.full()
+        return self.buffer.full()
 
     def isEmpty(self):
-        self.buffer.empty()
+        return self.buffer.empty()
 
     def putComponent(self, component):
         self.buffer.put(component)
