@@ -1,10 +1,11 @@
 from event import Event
 from buffer import Buffer
+import random
 
 class Workstation:
     """docstring for Workstation."""
 
-    def __init__(self, name, buffers, product, futureEvents, blockedQueue, log):
+    def __init__(self, name, buffers, product, futureEvents, blockedQueue, log, times, seed):
         super(Workstation, self).__init__()
         self.name = name
         self.buffers = buffers
@@ -13,6 +14,8 @@ class Workstation:
         self.blockedQueue = blockedQueue
         self.log = log
         self.productsMade = 0
+        self.times = times
+        self.seed = seed
         self.components = []
         self.blockedTime = 0
         self.blockTimeStart = 0
@@ -22,13 +25,12 @@ class Workstation:
         self.log(str(self) + " Started ")
 
     def getComponents(self, simulationTime):
-
         if all(map(Buffer.hasComponent, self.buffers)):
             if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
             self.components = list(map(Buffer.get, self.buffers))
-            self.futureEvents.put(Event(simulationTime+40, self, self.finishProduct))
+            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime

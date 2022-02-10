@@ -1,11 +1,11 @@
 from event import Event
 from component import Component
+import random
 
 class Inspector:
     """docstring for Inspector."""
 
-
-    def __init__(self, name, components, buffers, futureEvents, blockedQueue, log):
+    def __init__(self, name, components, buffers, futureEvents, blockedQueue, log, times, seed):
         super(Inspector, self).__init__()
         self.name = name
         self.components = components
@@ -13,6 +13,8 @@ class Inspector:
         self.futureEvents = futureEvents
         self.blockedQueue = blockedQueue
         self.log = log
+        self.times = times
+        self.seed = seed
         self.blockedTime = 0
         self.blockTimeStart = 0
 
@@ -22,7 +24,15 @@ class Inspector:
 
     def getComponent(self, simulationTime):
         self.component = Component(self.components)
-        self.futureEvents.put(Event(simulationTime+10, self, self.putComponent))
+        if(len(self.components)==1):
+            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.putComponent))
+        elif(len(self.components)==2):
+            if(str(self.component)=="Component Type 2"):
+                self.futureEvents.put(Event(simulationTime+self.times[0].pop(0), self, self.putComponent))
+            elif(str(self.component)=="Component Type 3"):
+                self.futureEvents.put(Event(simulationTime+self.times[1].pop(0), self, self.putComponent))
+        else:
+            raise ValueError('The configuration was done wrong')
         self.log(str(self) + " grabbed " + str(self.component))
 
     def putComponent(self, simulationTime):
