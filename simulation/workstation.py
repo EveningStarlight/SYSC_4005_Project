@@ -30,11 +30,11 @@ class Workstation:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
             self.components = list(map(Buffer.get, self.buffers))
-            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, finishProduct))
+            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
-            self.log(str(self) + " was blocked")
+            self.log(str(self) + " was blocked", colour="yellow")
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
         else:
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
