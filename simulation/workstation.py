@@ -30,7 +30,7 @@ class Workstation:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
             self.components = list(map(Buffer.get, self.buffers))
-            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, finishProduct))
+            self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
