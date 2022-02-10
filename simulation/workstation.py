@@ -53,4 +53,3 @@ class Workstation:
         if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
-        self.log(str(self) + " Total Blocked Time: " + str(self.blockedTime))
