@@ -39,7 +39,7 @@ class Inspector:
         buffer = min(self.buffers)
         if buffer.isFull() and self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
-            self.log(str(self) + " was blocked")
+            self.log(str(self) + " was blocked", colour="yellow")
             self.blockedQueue.put(Event(simulationTime, self, self.putComponent))
         elif buffer.isFull():
             self.blockedQueue.put(Event(simulationTime, self, self.putComponent))
@@ -59,4 +59,3 @@ class Inspector:
         if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
-        self.log(str(self) + " Total Blocked Time: " + str(self.blockedTime))

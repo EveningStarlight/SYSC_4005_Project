@@ -94,18 +94,19 @@ class Simulation:
 
     def start(self):
         self.log(chalk.cyan("Starting Simulation"))
-        self.inspectors[0].start()
-        self.inspectors[1].start()
-        self.workstations[0].start()
-        self.workstations[1].start()
-        self.workstations[2].start()
 
+        # Starts all the workers
+        for worker in self.inspectors + self.workstations:
+            worker.start()
+
+        # Runs the simulation until reaching the end event
         currentEvent = self.futureEvents.get()
         while currentEvent.action != "end":
             currentEvent.action(self.currentTime)
 
             self.pastEvents.append(currentEvent)
 
+            # Performs all the blocked events
             blockedEvents = list(self.blockedQueue.queue)
             self.blockedQueue.queue.clear()
             for event in blockedEvents:
@@ -115,14 +116,28 @@ class Simulation:
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
 
-        self.inspectors[0].end(self.currentTime)
-        self.inspectors[1].end(self.currentTime)
-        self.workstations[0].end(self.currentTime)
-        self.workstations[1].end(self.currentTime)
-        self.workstations[2].end(self.currentTime)
+        # Ends all the Worker Objects
+        for worker in self.inspectors + self.workstations:
+            worker.end(self.currentTime)
 
-    def log(self, message):
+        # Calculates the percentage that each worker is busy
+        for worker in self.inspectors + self.workstations:
+            percentBusy = 100 - 100*worker.blockedTime/self.currentTime
+            percentString = "{:5.2f}s".format(percentBusy)
+            print(chalk.green(str(worker) + " was busy for " + percentString + "% of the time."))
+
+        # Calculates the parts/min of each of the workstations,
+        # as well as the total output of parts/min
+        totalParts = 0
+        for workstation in self.workstations:
+            totalParts += workstation.productsMade
+
+            partsPerMin = "{:4.3f} parts/min.".format(workstation.productsMade / self.currentTime)
+            print(chalk.green(str(workstation) + " created " + partsPerMin))
+
+        partsPerMin = "{:4.3f} parts/min.".format(totalParts / self.currentTime)
+        print(chalk.green("The total output was " + partsPerMin))
+
+    def log(self, message, colour="white"):
         timeString = "{:7.3f}m".format(self.currentTime)
-        print(chalk.bgGreen(timeString) + " " + message)
-    
-    
+        print(chalk.bgGreen(timeString) + " " + getattr(chalk, colour)(message))

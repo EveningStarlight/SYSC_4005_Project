@@ -34,7 +34,7 @@ class Workstation:
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
             self.blockTimeStart = simulationTime
-            self.log(str(self) + " was blocked")
+            self.log(str(self) + " was blocked", colour="yellow")
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
         else:
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
@@ -53,4 +53,3 @@ class Workstation:
         if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
-        self.log(str(self) + " Total Blocked Time: " + str(self.blockedTime))
