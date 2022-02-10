@@ -54,5 +54,5 @@ class Simulation:
         self.log(chalk.cyan("Simulation Complete"))
 
     def log(self, message):
-        timeString = "{:7.3f}s".format(self.currentTime)
+        timeString = "{:7.3f}m".format(self.currentTime)
         print(chalk.bgGreen(timeString) + " " + message)
