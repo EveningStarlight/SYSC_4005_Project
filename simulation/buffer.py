@@ -33,6 +33,9 @@ class Buffer:
     def __str__(self):
         return "Buffer " + str(self.product) + "-" + str(self.component)
 
+    def __repr__(self):
+        return str(self)
+
     def hasComponent(buffer):
         return not buffer.isEmpty()
 
