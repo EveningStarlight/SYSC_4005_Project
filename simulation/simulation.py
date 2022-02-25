@@ -10,59 +10,60 @@ from simple_chalk import chalk
 
 class Simulation:
     """docstring for Component."""
-        
+    outputVerision = "1.0v"
+
     def __init__(self, simulationRunTime, seed):
         super(Simulation, self).__init__()
 
         self.seed = seed
         self.currentTime = 0
-        
+
         inspector1Times = list()
         inspector22Times = list()
         inspector23Times = list()
         workstation1Times = list()
         workstation2Times = list()
         workstation3Times = list()
-        
+
         path = os.path.abspath(os.path.dirname(__file__))
-        
+
         insp1TimesFile = open(os.path.join(path,'../data/servinsp1.dat'))
         for line in insp1TimesFile:
             inspector1Times.append(float(line))
         insp1TimesFile.close()
         random.Random(self.seed).shuffle(inspector1Times)
-        
+
         insp22TimesFile = open(os.path.join(path,'../data/servinsp22.dat'))
         for line in insp22TimesFile:
             inspector22Times.append(float(line))
         insp22TimesFile.close()
         random.Random(self.seed).shuffle(inspector22Times)
-        
+
         insp23TimesFile = open(os.path.join(path,'../data/servinsp23.dat'))
         for line in insp23TimesFile:
             inspector23Times.append(float(line))
         insp23TimesFile.close()
         random.Random(self.seed).shuffle(inspector23Times)
-        
+
         ws1TimesFile = open(os.path.join(path,'../data/ws1.dat'))
         for line in ws1TimesFile:
             workstation1Times.append(float(line))
         ws1TimesFile.close()
         random.Random(self.seed).shuffle(workstation1Times)
-        
+
         ws2TimesFile = open(os.path.join(path,'../data/ws2.dat'))
         for line in ws2TimesFile:
             workstation2Times.append(float(line))
         ws2TimesFile.close()
         random.Random(self.seed).shuffle(workstation2Times)
-        
+
         ws3TimesFile = open(os.path.join(path,'../data/ws3.dat'))
         for line in ws3TimesFile:
             workstation3Times.append(float(line))
         ws3TimesFile.close()
         random.Random(self.seed).shuffle(workstation3Times)
-  
-        
+
+
         futureEvents = queue.PriorityQueue()
         futureEvents.put(Event(simulationRunTime, self, "end"))
 
@@ -116,6 +117,8 @@ class Simulation:
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
 
+        self.stats = {}
+
         # Ends all the Worker Objects
         for worker in self.inspectors + self.workstations:
             worker.end(self.currentTime)
@@ -123,7 +126,8 @@ class Simulation:
         # Calculates the percentage that each worker is busy
         for worker in self.inspectors + self.workstations:
             percentBusy = 100 - 100*worker.blockedTime/self.currentTime
-            percentString = "{:5.2f}s".format(percentBusy)
+            percentString = "{:5.2f}".format(percentBusy)
+            self.stats[worker.name + " percent busy"] = percentString
             print(chalk.green(str(worker) + " was busy for " + percentString + "% of the time."))
 
         # Calculates the parts/min of each of the workstations,
@@ -132,12 +136,33 @@ class Simulation:
         for workstation in self.workstations:
             totalParts += workstation.productsMade
 
-            partsPerMin = "{:4.3f} parts/min.".format(workstation.productsMade / self.currentTime)
-            print(chalk.green(str(workstation) + " created " + partsPerMin))
+            partsPerMin = "{:4.3f}".format(workstation.productsMade / self.currentTime)
+            self.stats[workstation.name + " parts per minute"] = partsPerMin
+            print(chalk.green(str(workstation) + " created " + partsPerMin + " parts/min."))
 
-        partsPerMin = "{:4.3f} parts/min.".format(totalParts / self.currentTime)
-        print(chalk.green("The total output was " + partsPerMin))
+        partsPerMin = "{:4.3f}".format(totalParts / self.currentTime)
+        self.stats["Factory parts per minute"] = partsPerMin
+        print(chalk.green("The total output was " + partsPerMin + " parts/min."))
+
+        self.saveOutput()
 
     def log(self, message, colour="white"):
         timeString = "{:7.3f}m".format(self.currentTime)
         print(chalk.bgGreen(timeString) + " " + getattr(chalk, colour)(message))
+
+    def outputArray(self):
+        output = [Simulation.outputVerision] # 1.0v
+        for k, v in self.stats.items():
+            output.append(str(k) + ": " + str(v))
+        return output
+
+    def saveOutput(self):
+        parentDirect = os.path.split(os.path.dirname(__file__))[0]
+        directory = os.path.join(parentDirect, 'stats')
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        path = os.path.join(directory, str(self.seed) + ".txt")
+        f = open(path, "w")
+        for line in self.outputArray():
+            f.write(line + "\n")
+        f.close()
