@@ -94,7 +94,7 @@ class Simulation:
         self.workstations = [workstation1, workstation2, workstation3]
 
 
-    def start(self):
+    def run(self):
         self.log(chalk.cyan("Starting Simulation"))
 
         # Starts all the workers
@@ -118,10 +118,13 @@ class Simulation:
             self.currentTime = currentEvent.time
         self.log(chalk.cyan("Simulation Complete"))
 
+        self.end()
+
+    def end(self):
         self.stats = {}
 
         # Ends all the Worker Objects
-        for worker in self.inspectors + self.workstations:
+        for worker in self.inspectors + self.workstations + self.buffers:
             worker.end(self.currentTime)
 
         # Calculates the percentage that each worker is busy
@@ -143,7 +146,12 @@ class Simulation:
 
         partsPerMin = "{:4.3f}".format(totalParts / self.currentTime)
         self.stats["Factory parts per minute"] = partsPerMin
-        print(chalk.green("The total output was " + partsPerMin + " parts/min."))
+        print(chalk.green("The total output was  " + partsPerMin + " parts/min."))
+
+        for buffer in self.buffers:
+            averageComponents = "{:4.3f}".format(buffer.averageComponents/self.currentTime)
+            self.stats[buffer.name + " average occupancy"] = averageComponents
+            print(chalk.green(str(buffer) + " held " + averageComponents + " components on average."))
 
         self.saveOutput()
 

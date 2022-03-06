@@ -10,4 +10,4 @@ if __name__ == '__main__':
 
     for i in range(numberOfSims):
         sim = simulation.Simulation(SIMULATION_RUN_TIME, seed+i)
-        sim.start()
+        sim.run()

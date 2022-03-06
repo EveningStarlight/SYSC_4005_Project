@@ -47,7 +47,7 @@ class Inspector:
             if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
-            buffer.putComponent(self.component)
+            buffer.putComponent(self.component, simulationTime)
             self.log(str(self) + " put component in " + str(buffer))
             self.getComponent(simulationTime)
 

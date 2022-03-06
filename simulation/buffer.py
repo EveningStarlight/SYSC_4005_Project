@@ -7,10 +7,13 @@ class Buffer:
 
     def __init__(self, component, product, futureEvents):
         super(Buffer, self).__init__()
+        self.name = "Buffer " + str(product) + "-" + str(component)
         self.component = component
         self.product = product
         self.buffer = queue.Queue(maxsize=2)
         self.futureEvents = futureEvents
+        self.averageComponents = 0
+        self.previousTime = 0
 
     def isFull(self):
         return self.buffer.full()
@@ -18,11 +21,20 @@ class Buffer:
     def isEmpty(self):
         return self.buffer.empty()
 
-    def putComponent(self, component):
+    def putComponent(self, component, time):
+        self.updateAverageComponents(time)
         self.buffer.put(component)
 
-    def getComponent(self):
+    def getComponent(self, time):
+        self.updateAverageComponents(time)
         return self.buffer.get()
+
+    def updateAverageComponents(self, time):
+        self.averageComponents += self.buffer.qsize() * (time-self.previousTime)
+        self.previousTime = time
+
+    def end(self, time):
+        self.updateAverageComponents(time)
 
     def __lt__(self, other):
         if self.buffer.qsize() < other.buffer.qsize():
@@ -31,7 +43,7 @@ class Buffer:
             return self.product < other.product
 
     def __str__(self):
-        return "Buffer " + str(self.product) + "-" + str(self.component)
+        return self.name
 
     def __repr__(self):
         return str(self)
@@ -39,5 +51,5 @@ class Buffer:
     def hasComponent(buffer):
         return not buffer.isEmpty()
 
-    def get(buffer):
-        return buffer.getComponent()
+    def get(buffer, time):
+        return buffer.getComponent(time)
