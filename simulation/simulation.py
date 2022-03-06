@@ -16,6 +16,7 @@ class Simulation:
         super(Simulation, self).__init__()
 
         self.seed = seed
+        random.seed(a=self.seed, version=2)
         self.currentTime = 0
 
         inspector1Times = list()
