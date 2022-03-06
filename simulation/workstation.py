@@ -1,6 +1,7 @@
 from event import Event
 from buffer import Buffer
 import random
+from itertools import repeat
 
 class Workstation:
     """docstring for Workstation."""
@@ -29,7 +30,7 @@ class Workstation:
             if self.blockTimeStart != 0:
                 self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
-            self.components = list(map(Buffer.get, self.buffers))
+            self.components = list(map(Buffer.get, self.buffers, repeat(simulationTime)))
             self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
