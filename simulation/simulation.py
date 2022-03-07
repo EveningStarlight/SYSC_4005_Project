@@ -10,7 +10,7 @@ from simple_chalk import chalk
 
 class Simulation:
     """docstring for Component."""
-    outputVerision = "1.0v"
+    outputVerision = "v1.0"
 
     def __init__(self, simulationRunTime, seed):
         super(Simulation, self).__init__()
@@ -160,7 +160,7 @@ class Simulation:
         print(chalk.bgGreen(timeString) + " " + getattr(chalk, colour)(message))
 
     def outputArray(self):
-        output = [Simulation.outputVerision] # 1.0v
+        output = [Simulation.outputVerision]
         for k, v in self.stats.items():
             output.append(str(k) + ": " + str(v))
         return output
