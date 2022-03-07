@@ -22,3 +22,11 @@ Once this is done, the simulation can be run using
 ```shell
 python simulation/main.py
 ```
+
+## Creating simulation visualizations
+
+After running simulations, data will have been saved to the `/stats/` directory. The data can be visualized using:
+
+```shell
+python visualization/main.py
+```
