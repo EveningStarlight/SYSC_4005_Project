@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 import math
 
 class Visulization:
@@ -25,3 +26,13 @@ class Visulization:
 
         ax.hist(data['data'])
         ax.set_title(data['name'])
+
+    def createQQs(self):
+        keys = self.data.keys()
+
+        fig = sm.qqplot(keys, line='45')
+
+        plt.show()
+
+
+
