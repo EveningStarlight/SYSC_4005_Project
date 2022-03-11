@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 simple-chalk = "*"
+numpy = "*"
+matplotlib = "*"
 
 [dev-packages]
 
