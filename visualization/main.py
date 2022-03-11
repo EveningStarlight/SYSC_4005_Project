@@ -11,3 +11,4 @@ if __name__ == '__main__':
     visulization = Visulization(Data.getData(version))
     visulization.createHistograms()
     visulization.createQQs()
+    visulization.createChi2s()
