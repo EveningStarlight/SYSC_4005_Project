@@ -23,6 +23,12 @@ Once this is done, the simulation can be run using
 python simulation/main.py
 ```
 
+additional arguments can be supplied to specify the seed, and the number of simulations to be performed. The default seed is `1234`, the default number of simulations is `1`. Sequential simulations use incremental seeds.
+
+```shell
+python simulation/main.py 1234 1
+```
+
 ## Creating simulation visualizations
 
 After running simulations, data will have been saved to the `/stats/` directory. The data can be visualized using:
@@ -30,3 +36,4 @@ After running simulations, data will have been saved to the `/stats/` directory.
 ```shell
 python visualization/main.py
 ```
+
