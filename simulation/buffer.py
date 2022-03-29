@@ -5,7 +5,7 @@ import queue
 class Buffer:
     """docstring for Buffer."""
 
-    def __init__(self, component, product, futureEvents):
+    def __init__(self, component, product, futureEvents, initTime):
         super(Buffer, self).__init__()
         self.name = "Buffer " + str(product) + "-" + str(component)
         self.component = component
@@ -14,6 +14,7 @@ class Buffer:
         self.futureEvents = futureEvents
         self.averageComponents = 0
         self.previousTime = 0
+        self.initTime = initTime
 
     def isFull(self):
         return self.buffer.full()
@@ -30,7 +31,8 @@ class Buffer:
         return self.buffer.get()
 
     def updateAverageComponents(self, time):
-        self.averageComponents += self.buffer.qsize() * (time-self.previousTime)
+        if(time>self.initTime):
+            self.averageComponents += self.buffer.qsize() * (time-self.previousTime)
         self.previousTime = time
 
     def end(self, time):
