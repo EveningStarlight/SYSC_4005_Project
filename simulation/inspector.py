@@ -39,7 +39,7 @@ class Inspector:
     def putComponent(self, simulationTime):
         buffer = min(self.buffers)
         if buffer.isFull() and self.blockTimeStart == 0:
-            if(simulationTime>initTime):
+            if(simulationTime>self.initTime):
                 self.blockTimeStart = simulationTime
                 
             self.log(str(self) + " was blocked", colour="yellow")
@@ -60,5 +60,5 @@ class Inspector:
 
     def end(self, simulationTime):
         if self.blockTimeStart != 0:
-                self.blockedTime += (simulationTime - self.initTime - self.blockTimeStart)
+                self.blockedTime += (simulationTime - self.blockTimeStart)
                 self.blockTimeStart = 0
