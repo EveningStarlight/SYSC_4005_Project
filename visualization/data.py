@@ -14,10 +14,11 @@ class Data:
                 filePath = os.path.join(directory, file)
                 lines = open(filePath).readlines()
                 if lines.pop(0).strip() == version:
+                    time = lines.pop(0).strip().split(': ')[1]
                     for line in lines:
                         line = line.strip()
                         k, v = line.split(": ")
-                        data[k]['data'].append(float(v))
+                        data[k]['data'].append((float(v), float(time)))
 
         print("Data Loaded")
         return data

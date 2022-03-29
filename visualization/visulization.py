@@ -10,6 +10,21 @@ class Visulization:
     def __init__(self, data):
         self.data = data
 
+    def createScatter(self):
+        keys = self.data.keys()
+
+        for key in keys:
+            x = []
+            y = []
+            for item in self.data[key]['data']:
+                y.append(item[0])
+                x.append(item[1])
+            plt.scatter(x,y)
+            plt.title(key)
+            plt.xlabel('time (min)')
+            plt.show()
+
+
     def createHistograms(self):
         keys = self.data.keys()
 

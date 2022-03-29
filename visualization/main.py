@@ -9,10 +9,11 @@ if __name__ == '__main__':
 
     data = Data.getData(version)
 
-    stats = Stats(data)
-    stats.printStats()
+    #stats = Stats(data)
+    #stats.printStats()
 
     visulization = Visulization(data)
-    visulization.createHistograms()
-    visulization.createQQs()
-    visulization.createChi2s()
+    #visulization.createHistograms()
+    #visulization.createQQs()
+    #visulization.createChi2s()
+    visulization.createScatter()
