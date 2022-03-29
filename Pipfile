@@ -7,6 +7,8 @@ name = "pypi"
 simple-chalk = "*"
 numpy = "*"
 matplotlib = "*"
+statsmodels = "*"
+scipy = "*"
 
 [dev-packages]
 

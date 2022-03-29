@@ -51,15 +51,12 @@ class Visulization:
         fig = sm.qqplot(X, line='45', fit=True, dist=stats.norm)
         ax.set_title(data['name'])
 
-    
+
     def createChi2s(self):
         keys = self.data.keys()
 
         for key in keys:
             self.createChi2(key)
-
-
-
 
     def createChi2(self, key):
         data = self.data[key]
@@ -67,7 +64,7 @@ class Visulization:
         mean = statistics.mean(X)
         sigma = statistics.stdev(X)
         X_normal = np.random.normal(mean, sigma, 100)
-        
+
         value = np.concatenate((X,X_normal))
 
         p, dof = stats.chisquare(value)
@@ -79,8 +76,3 @@ class Visulization:
             print('Dependent (reject H0)')
         else:
             print('Independent (H0 holds true)')
-
-      #  plt.show()
-
-
-
