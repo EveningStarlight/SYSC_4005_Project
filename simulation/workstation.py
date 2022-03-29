@@ -6,7 +6,7 @@ from itertools import repeat
 class Workstation:
     """docstring for Workstation."""
 
-    def __init__(self, name, buffers, product, futureEvents, blockedQueue, log, times, seed):
+    def __init__(self, name, buffers, product, futureEvents, blockedQueue, log, times, seed, initTime):
         super(Workstation, self).__init__()
         self.name = name
         self.buffers = buffers
@@ -20,6 +20,7 @@ class Workstation:
         self.components = []
         self.blockedTime = 0
         self.blockTimeStart = 0
+        self.initTime = initTime
 
     def start(self):
         self.futureEvents.put(Event(20, self, self.getComponents))
@@ -34,17 +35,19 @@ class Workstation:
             self.futureEvents.put(Event(simulationTime+self.times.pop(0), self, self.finishProduct))
             self.log(str(self) + " grabbed from " + str(self.buffers))
         elif self.blockTimeStart == 0:
-            self.blockTimeStart = simulationTime
+            if(simulationTime>self.initTime):
+                self.blockTimeStart = simulationTime
             self.log(str(self) + " was blocked", colour="yellow")
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
         else:
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
 
     def finishProduct(self, simulationTime):
-        self.productsMade += 1
-        self.components = []
+        
+        if(simulationTime>self.initTime):
+            self.productsMade += 1
         self.log(str(self) + " finished product #" + str(self.productsMade))
-
+        self.components = []
         self.getComponents(simulationTime)
 
     def __str__(self):

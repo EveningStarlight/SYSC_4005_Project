@@ -5,7 +5,7 @@ import random
 class Inspector:
     """docstring for Inspector."""
 
-    def __init__(self, name, components, buffers, futureEvents, blockedQueue, log, times, seed):
+    def __init__(self, name, components, buffers, futureEvents, blockedQueue, log, times, seed, initTime):
         super(Inspector, self).__init__()
         self.name = name
         self.components = components
@@ -17,6 +17,7 @@ class Inspector:
         self.seed = seed
         self.blockedTime = 0
         self.blockTimeStart = 0
+        self.initTime = initTime
 
     def start(self):
         self.futureEvents.put(Event(0, self, self.getComponent))
@@ -38,7 +39,9 @@ class Inspector:
     def putComponent(self, simulationTime):
         buffer = min(self.buffers)
         if buffer.isFull() and self.blockTimeStart == 0:
-            self.blockTimeStart = simulationTime
+            if(simulationTime>initTime):
+                self.blockTimeStart = simulationTime
+                
             self.log(str(self) + " was blocked", colour="yellow")
             self.blockedQueue.put(Event(simulationTime, self, self.putComponent))
         elif buffer.isFull():

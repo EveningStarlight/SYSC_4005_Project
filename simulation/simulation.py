@@ -18,6 +18,7 @@ class Simulation:
         self.seed = seed
         random.seed(a=self.seed, version=2)
         self.currentTime = 0
+        self.initTime = 780
 
         inspector1Times = list()
         inspector22Times = list()
@@ -71,20 +72,20 @@ class Simulation:
         blockedQueue = queue.PriorityQueue()
 
 
-        buffer_1_1 = Buffer(component=1, product=1, futureEvents=futureEvents)
-        workstation1 = Workstation(name="Workstation 1", buffers=[buffer_1_1], product=1, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation1Times, seed=self.seed)
+        buffer_1_1 = Buffer(component=1, product=1, futureEvents=futureEvents, initTime=self.initTime)
+        workstation1 = Workstation(name="Workstation 1", buffers=[buffer_1_1], product=1, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation1Times, seed=self.seed, initTime=self.initTime)
 
-        buffer_2_1 = Buffer(component=1, product=2, futureEvents=futureEvents)
-        buffer_2_2 = Buffer(component=2, product=2, futureEvents=futureEvents)
-        workstation2 = Workstation(name="Workstation 2", buffers = [buffer_2_1,buffer_2_2], product=2, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation2Times, seed=self.seed)
+        buffer_2_1 = Buffer(component=1, product=2, futureEvents=futureEvents, initTime=self.initTime)
+        buffer_2_2 = Buffer(component=2, product=2, futureEvents=futureEvents, initTime=self.initTime)
+        workstation2 = Workstation(name="Workstation 2", buffers = [buffer_2_1,buffer_2_2], product=2, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation2Times, seed=self.seed, initTime=self.initTime)
 
-        buffer_3_1 = Buffer(component=1, product=3, futureEvents=futureEvents)
-        buffer_3_3 = Buffer(component=3, product=3, futureEvents=futureEvents)
-        workstation3 = Workstation(name="Workstation 3", buffers=[buffer_3_1, buffer_3_3], product=3, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation3Times, seed=self.seed)
+        buffer_3_1 = Buffer(component=1, product=3, futureEvents=futureEvents, initTime=self.initTime)
+        buffer_3_3 = Buffer(component=3, product=3, futureEvents=futureEvents, initTime=self.initTime)
+        workstation3 = Workstation(name="Workstation 3", buffers=[buffer_3_1, buffer_3_3], product=3, futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=workstation3Times, seed=self.seed, initTime=self.initTime)
 
-        inspector1 = Inspector(name="Inspector 1", components=[1], buffers=[buffer_1_1, buffer_2_1, buffer_3_1], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector1Times, seed=self.seed)
+        inspector1 = Inspector(name="Inspector 1", components=[1], buffers=[buffer_1_1, buffer_2_1, buffer_3_1], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector1Times, seed=self.seed, initTime=self.initTime)
         inspector2Times = [inspector22Times, inspector23Times]
-        inspector2 = Inspector(name="Inspector 2", components=[2,3], buffers=[buffer_2_2, buffer_3_3], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector2Times, seed=self.seed)
+        inspector2 = Inspector(name="Inspector 2", components=[2,3], buffers=[buffer_2_2, buffer_3_3], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector2Times, seed=self.seed, initTime=self.initTime)
 
         self.pastEvents = list()
         self.futureEvents = futureEvents
