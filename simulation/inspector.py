@@ -60,5 +60,5 @@ class Inspector:
 
     def end(self, simulationTime):
         if self.blockTimeStart != 0:
-                self.blockedTime += (simulationTime - self.blockTimeStart)
+                self.blockedTime += (simulationTime - self.initTime - self.blockTimeStart)
                 self.blockTimeStart = 0
