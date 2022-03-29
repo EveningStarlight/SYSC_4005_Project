@@ -4,6 +4,7 @@ class Data:
     newestVersion = "v1.0"
 
     def getData(version):
+        print("Loading Data")
         data = Data.getDataObject(version)
 
         parentDirect = os.path.split(os.path.dirname(__file__))[0]
@@ -18,6 +19,7 @@ class Data:
                         k, v = line.split(": ")
                         data[k]['data'].append(float(v))
 
+        print("Data Loaded")
         return data
 
     def getDataObject(version):
@@ -51,6 +53,7 @@ class Data:
             'data':[],
             'histMin': 0,
             'histMax': 100,
+            'format': lambda value: "{:3.0f}%".format(value),
              }
 
     def partsPerMin():
@@ -58,6 +61,7 @@ class Data:
             'data':[],
             'histMin': 0,
             'histMax': None,
+            'format': lambda value: "{:3.4f}".format(value),
              }
 
     def averageComponents():
@@ -65,4 +69,5 @@ class Data:
             'data':[],
             'histMin': 0,
             'histMax': 2,
+            'format': lambda value: "{:3.2f}".format(value),
              }
