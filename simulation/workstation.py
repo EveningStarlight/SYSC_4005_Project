@@ -43,7 +43,7 @@ class Workstation:
             self.blockedQueue.put(Event(simulationTime, self, self.getComponents))
 
     def finishProduct(self, simulationTime):
-        
+
         if(simulationTime>self.initTime):
             self.productsMade += 1
         self.log(str(self) + " finished product #" + str(self.productsMade))

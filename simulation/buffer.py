@@ -32,7 +32,8 @@ class Buffer:
 
     def updateAverageComponents(self, time):
         if(time>self.initTime):
-            self.averageComponents += self.buffer.qsize() * (time-self.previousTime)
+            previousTime = max(self.initTime, self.previousTime)
+            self.averageComponents += self.buffer.qsize() * (time-previousTime)
         self.previousTime = time
 
     def end(self, time):
