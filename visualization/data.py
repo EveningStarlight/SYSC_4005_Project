@@ -27,6 +27,7 @@ class Data:
             data = {
             "Inspector 1 percent busy": Data.percentBusy(),
             "Inspector 2 percent busy": Data.percentBusy(),
+            "Inspector 3 percent busy": Data.percentBusy(),
             "Workstation 1 percent busy": Data.percentBusy(),
             "Workstation 2 percent busy":  Data.percentBusy(),
             "Workstation 3 percent busy":  Data.percentBusy(),

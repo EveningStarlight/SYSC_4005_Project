@@ -18,11 +18,12 @@ class Simulation:
         self.seed = seed
         random.seed(a=self.seed, version=2)
         self.currentTime = 0
-        self.initTime = 780
+        self.initTime = 13*60
 
         inspector1Times = list()
         inspector22Times = list()
         inspector23Times = list()
+        inspector3Times = list()
         workstation1Times = list()
         workstation2Times = list()
         workstation3Times = list()
@@ -32,8 +33,10 @@ class Simulation:
         insp1TimesFile = open(os.path.join(path,'../data/servinsp1.dat'))
         for line in insp1TimesFile:
             inspector1Times.append(float(line))
+            inspector3Times.append(float(line))
         insp1TimesFile.close()
         random.Random(self.seed).shuffle(inspector1Times)
+        random.Random(self.seed).shuffle(inspector3Times)
 
         insp22TimesFile = open(os.path.join(path,'../data/servinsp22.dat'))
         for line in insp22TimesFile:
@@ -86,11 +89,12 @@ class Simulation:
         inspector1 = Inspector(name="Inspector 1", components=[1], buffers=[buffer_1_1, buffer_2_1, buffer_3_1], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector1Times, seed=self.seed, initTime=self.initTime)
         inspector2Times = [inspector22Times, inspector23Times]
         inspector2 = Inspector(name="Inspector 2", components=[2,3], buffers=[buffer_2_2, buffer_3_3], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector2Times, seed=self.seed, initTime=self.initTime)
+        inspector3 = Inspector(name="Inspector 3", components=[1], buffers=[buffer_1_1, buffer_2_1, buffer_3_1], futureEvents=futureEvents, blockedQueue=blockedQueue, log=self.log, times=inspector3Times, seed=self.seed, initTime=self.initTime)
 
         self.pastEvents = list()
         self.futureEvents = futureEvents
         self.blockedQueue = blockedQueue
-        self.inspectors = [inspector1, inspector2]
+        self.inspectors = [inspector1, inspector2, inspector3]
         self.buffers = [buffer_1_1, buffer_2_1, buffer_2_2, buffer_3_1, buffer_3_3]
         self.workstations = [workstation1, workstation2, workstation3]
 
