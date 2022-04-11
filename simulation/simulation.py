@@ -124,13 +124,15 @@ class Simulation:
     def end(self):
         self.stats = {}
 
+        simTime = self.currentTime-self.initTime
+
         # Ends all the Worker Objects
         for worker in self.inspectors + self.workstations + self.buffers:
             worker.end(self.currentTime)
 
         # Calculates the percentage that each worker is busy
         for worker in self.inspectors + self.workstations:
-            percentBusy = 100 - 100*worker.blockedTime/self.currentTime
+            percentBusy = 100 - 100*worker.blockedTime/simTime
             percentString = "{:5.2f}".format(percentBusy)
             self.stats[worker.name + " percent busy"] = percentString
             print(chalk.green(str(worker) + " was busy for " + percentString + "% of the time."))
@@ -141,16 +143,16 @@ class Simulation:
         for workstation in self.workstations:
             totalParts += workstation.productsMade
 
-            partsPerMin = "{:4.3f}".format(workstation.productsMade / self.currentTime)
+            partsPerMin = "{:4.3f}".format(workstation.productsMade / simTime)
             self.stats[workstation.name + " parts per minute"] = partsPerMin
             print(chalk.green(str(workstation) + " created " + partsPerMin + " parts/min."))
 
-        partsPerMin = "{:4.3f}".format(totalParts / self.currentTime)
+        partsPerMin = "{:4.3f}".format(totalParts / simTime)
         self.stats["Factory parts per minute"] = partsPerMin
         print(chalk.green("The total output was  " + partsPerMin + " parts/min."))
 
         for buffer in self.buffers:
-            averageComponents = "{:4.3f}".format(buffer.averageComponents/self.currentTime)
+            averageComponents = "{:4.3f}".format(buffer.averageComponents/simTime)
             self.stats[buffer.name + " average occupancy"] = averageComponents
             print(chalk.green(str(buffer) + " held " + averageComponents + " components on average."))
 
